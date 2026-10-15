@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes"><title>Pop Studio · Office</title>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes"><title>Pop Studio · Office</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0A0A0A"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="PopStudio">
 <script>
 // ======== DATA (edit here) ========
 const PROJECTS = [
@@ -90,7 +90,8 @@ const AGENTS = [
 #wrap{position:relative!important;top:auto!important;height:calc(100vh - 64px);height:calc(100dvh - var(--tb,64px))}
 canvas{touch-action:none;cursor:grab}canvas:active{cursor:grabbing}
 #zc{position:absolute;right:12px;bottom:12px;display:flex;flex-direction:column;gap:6px;z-index:4}#zc button{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:rgba(20,20,20,.9);color:var(--lime);font:700 18px Poppins,sans-serif;cursor:pointer}
-@media(max-width:820px){.top{padding:8px 10px;gap:8px}.top .sp{display:none}.ttl{display:none}.k{padding:4px 8px;font-size:11px}.k b{font-size:13px}.tog{overflow-x:auto;max-width:100%;flex-wrap:nowrap}.tog a{white-space:nowrap;padding:6px 10px;font-size:11px}#feed{width:calc(100% - 24px)}#card{max-width:80vw}.k{font-size:10px}.top .k:nth-child(5){display:none}}
+#mb{display:none;margin-left:auto;width:36px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--p2);color:var(--lime);font-size:16px}
+@media(max-width:820px){.top{padding:8px 10px;gap:8px;flex-wrap:nowrap;min-height:52px}.top .wm{font-size:13px}.logo svg{width:28px;height:28px}.sfx{display:none}#mb{display:block;flex:none}.top>.k,.top>.tog:not(#fsw){display:none}.top.open{flex-wrap:wrap}.top.open>.k,.top.open>.tog:not(#fsw){display:flex}#fsw{flex:none}.top .sp{display:none}.ttl{display:none}.k{padding:4px 8px;font-size:11px}.k b{font-size:13px}.tog{overflow-x:auto;max-width:100%;flex-wrap:nowrap}.tog a{white-space:nowrap;padding:6px 10px;font-size:11px}#feed{width:calc(100% - 24px)}#card{max-width:80vw}.k{font-size:10px}.top .k:nth-child(5){display:none}}
 </style></head><body>
 <div class="top"><div class="logo"><svg width="34" height="34" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <rect x="0" y="0" width="100" height="100" rx="24" fill="#C6FF00"/>
@@ -101,9 +102,9 @@ canvas{touch-action:none;cursor:grab}canvas:active{cursor:grabbing}
   </g>
   <path d="M74 14 C75.2 21.5 77.5 23.8 85 25 C77.5 26.2 75.2 28.5 74 36 C72.8 28.5 70.5 26.2 63 25 C70.5 23.8 72.8 21.5 74 14 Z" fill="#0A0A0A"/>
 </svg>
-<div class="wm">pop<br>studio</div></div><div class="ttl">Office · Live</div><div class="sp"></div>
+<div class="wm">pop<br>studio</div></div><div class="ttl">Office · Live</div><div class="sp"></div><button id="mb" aria-label="Menu" onclick="document.querySelector('.top').classList.toggle('open');setTimeout(fit,0)">☰</button>
 <div class="k"><b id="clk">--:--</b>Dubai</div><div class="k"><b>25</b>Headcount</div><div class="k" id="pc"></div>
-<div class="tog" id="fsw"><a class="on" data-v="2" href="#" onclick="setView(2);return false">Floor 2 · Executive</a><a data-v="1" href="#" onclick="setView(1);return false">Floor 1 · Studio</a><a data-v="both" href="#" onclick="setView('both');return false">Both</a></div><div class="tog"><a class="on" href="index.html">Office</a><a href="dashboard.html">Dashboard</a></div></div>
+<div class="tog" id="fsw"><a class="on" data-v="2" href="#" onclick="setView(2);return false">Floor 2<span class="sfx"> · Executive</span></a><a data-v="1" href="#" onclick="setView(1);return false">Floor 1<span class="sfx"> · Studio</span></a><a data-v="both" href="#" onclick="setView('both');return false">Both</a></div><div class="tog"><a class="on" href="index.html">Office</a><a href="dashboard.html">Dashboard</a></div></div>
 <div id="wrap"><canvas id="c"></canvas><div id="zc"><button id="zi" aria-label="Zoom in">+</button><button id="zo" aria-label="Zoom out">−</button><button id="zr" aria-label="Reset view" style="font-size:12px">⟲</button></div></div><div id="card"></div><div id="ft" onclick="feed.classList.remove('off');ft.style.display='none'" style="display:block;position:absolute;top:76px;right:12px;cursor:pointer" class="k"><b>●</b>Activity</div><div id="feed" class="off"><h4><i></i>Live activity<span id="fb" onclick="feed.classList.add('off');ft.style.display='block'">hide ✕</span></h4><div id="log"></div></div>
 <script>
 const W=1450,H=715,cv=document.getElementById('c'),ctx=cv.getContext('2d');let S=1,DPR=window.devicePixelRatio||1;
@@ -329,4 +330,4 @@ cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
 cv.addEventListener('mouseleave',()=>{if(!drag){hover=null;card.style.display='none'}});
 cv.addEventListener('wheel',e=>{e.preventDefault();const r=cv.getBoundingClientRect();zoomAt(Math.exp(-e.deltaY*.0015),e.clientX-r.left,e.clientY-r.top)},{passive:false});
 zi.onclick=()=>zoomAt(1.3,CW/2,CH/2);zo.onclick=()=>zoomAt(1/1.3,CW/2,CH/2);zr.onclick=()=>{ZM=1;PANX=PANY=0;applyView()};
-</script></body></html>
+</script><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))</script></body></html>

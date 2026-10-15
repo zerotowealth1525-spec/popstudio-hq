@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PopStudio HQ</title>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PopStudio HQ</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0A0A0A"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="PopStudio">
 <script>
 // ===== EDIT PROJECTS HERE =====  status: "Briefed" | "In progress" | "Review" | "Delivered"
 const PROJECTS = [
@@ -92,4 +92,4 @@ const ST=["Briefed","In progress","Review","Delivered"];
 board.innerHTML=ST.map(s=>{const ps=PROJECTS.filter(p=>p.status===s);return `<div class="col"><h5>${s}<span class="cnt">${ps.length}</span></h5>${ps.map(p=>`<div class="task"><b>${p.title}</b><small>${p.note}</small><small>👤 ${p.owner} · Briefed ${p.briefed}</small></div>`).join("")}</div>`}).join("");
 hc.textContent=HEADCOUNT;act.textContent=PROJECTS.filter(p=>p.status!=="Delivered").length;
 flow.innerHTML=["Owner","CEO","Manager","Team","EDITOR review","CEO","Owner"].map((x,i)=>`<span class="step ${x==="Owner"?"hl":""}">${x}</span>`).join('<span class="arr">→</span>');
-</script></body></html>
+</script><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))</script></body></html>
