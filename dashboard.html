@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PopStudio HQ</title>
+<script>
+// ===== EDIT PROJECTS HERE =====  status: "Briefed" | "In progress" | "Review" | "Delivered"
+const PROJECTS = [
+  {title:"Launch positioning", owner:"Marketing Manager", dept:"Marketing", status:"Review", briefed:"15 Oct 2026", note:"Being aligned to brand voice"},
+  {title:"Showreel concept", owner:"Creative Manager", dept:"Creative", status:"Review", briefed:"15 Oct 2026", note:"Reworked to brand, awaiting owner"},
+  {title:"First 20 prospects", owner:"Sales Manager", dept:"Sales", status:"Review", briefed:"15 Oct 2026", note:"19 verified prospects, awaiting owner"}
+];
+const HEADCOUNT = 25;
+</script>
+<style>
+h1,h2,h3,h4,h5,.stat b,.step,.wm{font-family:'Poppins','DM Sans',system-ui,sans-serif}
+.logo{display:flex;align-items:center;gap:12px}.wm{font-weight:700;font-size:20px;line-height:.88;letter-spacing:-.03em;color:var(--txt)}
+:root{--bg:#0A0A0A;--panel:#141414;--p2:#1A1A1A;--line:#2a2a2a;--txt:#F4F4F1;--mut:#8a8a8a;--pop:#C6FF00;--pop2:#C6FF00;--cy:#C6FF00}
+*{box-sizing:border-box}body{margin:0;font-family:'DM Sans',system-ui,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--txt)}
+header{display:flex;justify-content:space-between;align-items:center;padding:24px 36px;border-bottom:1px solid var(--line)}
+h1{margin:0;font-size:28px;letter-spacing:-.5px}h1 span{color:var(--pop)}
+.sub{color:var(--mut);font-size:13px;margin-top:4px}.stats{display:flex;gap:12px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 18px;text-align:center}.stat b{display:block;font-size:24px;color:var(--pop)}.stat small{color:var(--mut)}
+main{padding:24px 36px;display:grid;gap:24px}section{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px}
+h2{margin:0 0 16px;font-size:16px;text-transform:uppercase;letter-spacing:1.5px;color:var(--mut)}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.step{padding:8px 14px;border-radius:999px;background:var(--p2);border:1px solid var(--line);font-weight:600;font-size:13px}.step.hl{background:var(--pop);border-color:var(--pop);color:#0A0A0A}.arr{color:var(--pop)}
+.orgwrap{display:grid;grid-template-columns:1fr 320px;gap:20px}
+ul.tree,ul.tree ul{list-style:none;margin:0;padding-left:22px;border-left:1px dashed var(--line)}ul.tree{padding-left:0;border:0}
+ul.tree li{margin:5px 0}.node{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:10px;background:var(--p2);border:1px solid var(--line);cursor:pointer;font-size:13px}
+.node:hover,.node.sel{border-color:var(--pop);box-shadow:0 0 0 2px #C6FF0033}.tog{width:16px;color:var(--pop);font-weight:700}.collapsed>ul{display:none}
+.lvl0 .tog,.lvl0 small{color:#0A0A0A!important}.lvl0{background:var(--pop);color:#0A0A0A;border-color:var(--pop)}.lvl1{border-color:#C6FF0066}.lvl2{border-color:#3a3a3a}
+.card{position:sticky;top:20px;background:var(--p2);border:1px solid var(--line);border-radius:14px;padding:18px;min-height:200px}.card h3{margin:0;color:var(--pop)}.card .r{color:var(--cy);font-size:13px;margin:4px 0 12px}.card li{color:var(--mut);font-size:13px;margin:4px 0}
+.depts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.dept{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--p2);border-top:3px solid var(--c)}.dept h4{margin:0 0 4px}.dept .m{color:var(--mut);font-size:12px;margin-bottom:10px}.chip{display:inline-block;margin:3px 3px 0 0;padding:4px 9px;border-radius:999px;background:#222;font-size:12px}
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.col{background:var(--p2);border:1px solid var(--line);border-radius:14px;padding:12px;min-height:160px}.col h5{margin:0 0 10px;display:flex;justify-content:space-between;font-size:13px}.cnt{background:#222;border-radius:99px;padding:0 8px}
+.task{background:#1f1f1f;border-radius:10px;padding:12px;margin-bottom:10px;border-left:3px solid var(--pop)}.task b{display:block}.task small{color:var(--mut);display:block;margin-top:4px}
+footer{color:var(--mut);font-size:12px;text-align:center;padding:10px 0 30px}
+</style></head><body>
+<header><div><div class="logo"><svg width="44" height="44" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect x="0" y="0" width="100" height="100" rx="24" fill="#C6FF00"/>
+  <g fill="none" stroke="#0A0A0A" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M71 36 V68 a8 8 0 0 1 -8 8 H29 a8 8 0 0 1 -8 -8 V42 a8 8 0 0 1 8 -8 h5 l4 -6 h12"/>
+    <circle cx="47" cy="55" r="11.5"/>
+    <path d="M41.5 52 a6.5 6.5 0 0 1 5 -4.5"/>
+  </g>
+  <path d="M74 14 C75.2 21.5 77.5 23.8 85 25 C77.5 26.2 75.2 28.5 74 36 C72.8 28.5 70.5 26.2 63 25 C70.5 23.8 72.8 21.5 74 14 Z" fill="#0A0A0A"/>
+</svg>
+<div class="wm">pop<br>studio</div><h1 style="margin-left:14px;padding-left:16px;border-left:1px solid var(--line)">HQ</h1></div><div class="sub">Creative AI agency · AI ad films · UGC videos · Personal branding · SaaS marketing · Marketing</div></div>
+<div class="stats"><a href="index.html" style="align-self:center;background:#C6FF00;color:#0A0A0A;font:600 13px Poppins,sans-serif;padding:10px 16px;border-radius:999px;text-decoration:none">← Office</a><div class="stat"><b id="hc"></b><small>Headcount</small></div><div class="stat"><b>4</b><small>Departments</small></div><div class="stat"><b id="act"></b><small>Active projects</small></div></div></header>
+<main>
+<section><h2>Workflow</h2><div class="flow" id="flow"></div></section>
+<section><h2>Org chart <small style="text-transform:none;letter-spacing:0">(click ▸ to collapse, click a name for details)</small></h2><div class="orgwrap"><ul class="tree" id="tree"></ul><div class="card" id="card"><h3>Select a person</h3><div class="r">Click anyone in the chart</div></div></div></section>
+<section><h2>Departments</h2><div class="depts" id="depts"></div></section>
+<section><h2>Project board</h2><div class="board" id="board"></div></section>
+</main><footer>PopStudio HQ · nothing goes to clients or gets published without Owner approval</footer>
+<script>
+const P=(n,r,resp,kids)=>({n,r,resp,kids:kids||[]});
+const ORG=P("Owner","Owner",["Sets direction","Final approval on everything external"],[
+ P("CEO","Chief Executive",["Single point of contact for Owner","Routes work to managers","Final check before delivery"],[
+  P("EXECUTIVE","Chief of Staff",["Cross-department coordination","Priorities & follow-ups"]),
+  P("MANAGER","General Manager",["Keeps departments in step","Process & delivery tracking"]),
+  P("MARKETING MANAGER","Head of Marketing",["Positioning & messaging","Leads marketing team"],[
+   P("Product Marketer","Messaging",["Value props, offers, launch messaging"]),
+   P("COPYWRITER","Copywriting",["Scripts, ad copy, captions, web copy"]),
+   P("SEO & AEO Desk","Search & answer engines",["SEO/AEO content and optimisation"]),
+   P("Market Researcher","Research",["Customer, competitor and market insight"]),
+   P("last30days","Trend scout",["What's trending in the last 30 days"])]),
+  P("CREATIVE MANAGER","Head of Creative",["Owns creative output","Leads creative team"],[
+   P("BRAND STRATEGIST","Brand strategy",["Brand platforms, personal branding strategy"]),
+   P("EDITOR","Quality Review",["Reviews all work before it reaches CEO","Brand & quality standards"]),
+   P("CREATOR","Creative Lead",["Directs visual production","Leads the makers"],[
+    P("GRAPHIC DESIGNER","Design",["Static ads, brand assets, layouts"]),
+    P("MOTION GRAPHICS","Motion",["Animated ads, titles, explainer motion"]),
+    P("AI VISUALISER","AI visuals",["AI image/video generation for ad films & UGC"]),
+    P("PHOTOGRAPHER","Photography",["Product and portrait imagery"]),
+    P("3D ARTIST","3D",["3D product renders and scenes"]),
+    P("Video Editor","Editing",["Cuts ad films, UGC videos and reels"]),
+    P("Stills & Clips Desk","Assets",["Stills, thumbnails, clip pulls"])])]),
+  P("SALES MANAGER","Head of Sales",["Pipeline & client acquisition"],[
+   P("Outbound Prospecting","Prospecting",["Lead lists and outreach drafts"]),
+   P("CUSTOMER SUPPORT","Client support",["Drafts client replies (Owner approves)"])]),
+  P("OPERATIONS MANAGER","Head of Operations",["Finance, tools and systems"],[
+   P("FINANCE","Finance",["Budgets, invoices, numbers"]),
+   P("IT","IT",["Tools, automation, systems"])])])]);
+let sel;function show(p,el){sel&&sel.classList.remove("sel");(sel=el).classList.add("sel");
+ card.innerHTML=`<h3>${p.n}</h3><div class="r">${p.r}</div><ul>${p.resp.map(x=>`<li>${x}</li>`).join("")}</ul>${p.kids.length?`<div class="r">Direct reports: ${p.kids.map(k=>k.n).join(", ")}</div>`:""}`}
+function build(p,d){const li=document.createElement("li");const s=document.createElement("span");s.className="node lvl"+Math.min(d,2);
+ s.innerHTML=`<span class="tog">${p.kids.length?"▾":"•"}</span>${p.n} <small style="color:var(--mut)">${p.r}</small>`;
+ s.onclick=e=>{if(e.target.classList.contains("tog")&&p.kids.length){li.classList.toggle("collapsed");e.target.textContent=li.classList.contains("collapsed")?"▸":"▾"}else show(p,s)};
+ li.appendChild(s);if(p.kids.length){const u=document.createElement("ul");p.kids.forEach(k=>u.appendChild(build(k,d+1)));li.appendChild(u)}return li}
+tree.appendChild(build(ORG,0));
+const flat=p=>[p.n,...p.kids.flatMap(flat)];const C=ORG.kids[0];
+const cols={"MARKETING MANAGER":"#C6FF00","CREATIVE MANAGER":"#C6FF00","SALES MANAGER":"#C6FF00","OPERATIONS MANAGER":"#C6FF00"};
+depts.innerHTML=`<div class="dept" style="--c:#F4F4F1"><h4>Leadership</h4><div class="m">CEO</div>${["CEO","EXECUTIVE","MANAGER"].map(x=>`<span class="chip">${x}</span>`).join("")}</div>`+
+ C.kids.filter(m=>cols[m.n]).map(m=>{const t=m.kids.flatMap(flat);return `<div class="dept" style="--c:${cols[m.n]}"><h4>${m.n.replace(" MANAGER","").replace(/^./,c=>c)}</h4><div class="m">Lead: ${m.n} · ${t.length} people</div>${t.map(x=>`<span class="chip">${x}</span>`).join("")}</div>`}).join("");
+const ST=["Briefed","In progress","Review","Delivered"];
+board.innerHTML=ST.map(s=>{const ps=PROJECTS.filter(p=>p.status===s);return `<div class="col"><h5>${s}<span class="cnt">${ps.length}</span></h5>${ps.map(p=>`<div class="task"><b>${p.title}</b><small>${p.note}</small><small>👤 ${p.owner} · Briefed ${p.briefed}</small></div>`).join("")}</div>`}).join("");
+hc.textContent=HEADCOUNT;act.textContent=PROJECTS.filter(p=>p.status!=="Delivered").length;
+flow.innerHTML=["Owner","CEO","Manager","Team","EDITOR review","CEO","Owner"].map((x,i)=>`<span class="step ${x==="Owner"?"hl":""}">${x}</span>`).join('<span class="arr">→</span>');
+</script></body></html>
