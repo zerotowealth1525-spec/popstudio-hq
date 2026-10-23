@@ -7,24 +7,27 @@ const PROJECTS = [
   {title:"First 20 prospects", owner:"SALES MANAGER",     team:"Outbound Prospecting", status:"Review", note:"19 verified prospects, awaiting owner"}
 ];
 const HEADCOUNT = 25;
-// file handoffs flying along the workflow (path of agent names; OWNER = entrance)
-const FILES = [
-  {file:"popstudio-positioning.md", type:"doc",   project:"Launch positioning", path:["OWNER","CEO","MARKETING MANAGER","COPYWRITER","EDITOR","CEO","OWNER"]},
-  {file:"concept.md",               type:"doc",   project:"Showreel concept",   path:["OWNER","CEO","CREATIVE MANAGER","CREATOR","EDITOR","CEO","OWNER"]},
-  {file:"frame1_pop.jpg",           type:"image", project:"Showreel concept",   path:["CREATOR","AI VISUALISER","MOTION GRAPHICS","EDITOR","CREATIVE MANAGER","CEO"]},
-  {file:"prospects.md",             type:"doc",   project:"First 20 prospects", path:["OWNER","CEO","SALES MANAGER","Outbound Prospecting","EDITOR","CEO","OWNER"]},
-  {file:"dashboard.html",           type:"video", project:"HQ dashboard",       path:["CEO","OPERATIONS MANAGER","IT","EDITOR","CEO","OWNER"]}
-];
-// two-way discussions [a, b, lineA, lineB]
-const PAIRS = [
-  ["COPYWRITER","Product Marketer","Is 'Pop your brand' too loud?","Loud is the brief 😄"],
-  ["CREATOR","MOTION GRAPHICS","Lime on the logo sting?","Already keyframed ✓"],
-  ["AI VISUALISER","3D ARTIST","Need a 3D plate for shot 4","Rendering it now"],
-  ["SALES MANAGER","Outbound Prospecting","How many verified?","19 of 20 ✓"],
-  ["EDITOR","BRAND STRATEGIST","Tone matches pillars?","Yes, ship it"],
-  ["FINANCE","OPERATIONS MANAGER","Rate card v1 ready","Send to CEO"],
-  ["EXECUTIVE","MANAGER","Board updated?","All 3 in Review"],
-  ["Market Researcher","last30days","UGC trend data?","Sending top 10"]
+// conversations: who talks, then short lines they take in turn. No client names or stats.
+const TALKS = [
+  {who:["CEO","EXECUTIVE","MANAGER"], lines:["Update's waiting in review","I'm on it","Can you check this?","Looks good, approved","In progress","Sending it to you now"]},
+  {who:["FINANCE","IT"], lines:["Can you check this?","I'm on it","Sending it to you now","In progress"]},
+  {who:["COPYWRITER","Product Marketer"], lines:["Can you check this?","Looks good, approved","I'm on it"]},
+  {who:["CREATOR","MOTION GRAPHICS"], lines:["Sending it to you now","I'm on it","In progress"]},
+  {who:["AI VISUALISER","3D ARTIST"], lines:["Can you check this?","In progress","Sending it to you now"]},
+  {who:["EDITOR","BRAND STRATEGIST"], lines:["Update's waiting in review","Looks good, approved"]},
+  {who:["EDITOR","CREATOR"], lines:["Can you check this?","I'm on it"]},
+  {who:["GRAPHIC DESIGNER","CREATOR"], lines:["Sending it to you now","Looks good, approved"]},
+  {who:["Video Editor","EDITOR"], lines:["In progress","Can you check this?"]},
+  {who:["PHOTOGRAPHER","Stills & Clips Desk"], lines:["Sending it to you now","I'm on it"]},
+  {who:["SALES MANAGER","Outbound Prospecting"], lines:["Update's waiting in review","I'm on it"]},
+  {who:["CUSTOMER SUPPORT","SALES MANAGER"], lines:["Can you check this?","Looks good, approved"]},
+  {who:["FINANCE","OPERATIONS MANAGER"], lines:["Update's waiting in review","Looks good, approved"]},
+  {who:["MARKETING MANAGER","COPYWRITER"], lines:["Can you check this?","In progress","Sending it to you now"]},
+  {who:["CREATIVE MANAGER","CREATOR"], lines:["Update's waiting in review","I'm on it"]},
+  {who:["SEO & AEO Desk","Market Researcher"], lines:["Can you check this?","Sending it to you now"]},
+  {who:["last30days","Market Researcher"], lines:["In progress","I'm on it"]},
+  {who:["MOTION GRAPHICS","3D ARTIST"], lines:["Sending it to you now","Looks good, approved"]},
+  {who:["EXECUTIVE","MANAGER"], lines:["Let's huddle","Can you check this?","I'm on it"]}
 ];
 // zones: x,y,w,h on a 1600x900 floor
 // two floors, each a 3x3 grid of equal rooms (440x250)
@@ -40,7 +43,8 @@ const ZONES = [
   G("crem","Creative Manager",1,0,1),  G("cre","Creative Studio",1,1,1,4), G("ai","AI Lab",1,2,1,3),
   G("lift1","Reception · Lift",1,0,2), G("salesm","Sales Manager",1,1,2), G("sales","Client Hub",1,2,2,2)
 ];
-const RISER={x:260,y:775};
+const ESC={x:210,y:688,w:156,h:148,steps:8};
+const RISER={x:ESC.x+ESC.w/2,y:ESC.y+ESC.h/2};
 // name, role, manager, zone, default task, speech lines
 const AGENTS = [
  ["CEO","Chief Executive","Owner","ceo","Routing work & final checks",["Routing to managers","Approved for Owner?","Great work team"]],
@@ -172,9 +176,7 @@ PROJECTS.forEach(p=>{if(p.status==="Review"){A[p.owner].status='review';A[p.owne
 A["EDITOR"].status='review';["IT","FINANCE","Stills & Clips Desk"].forEach(n=>A[n].status='idle');
 const ENT={x:260,y:905},MEET=Z.meet,seats=[];for(let i=0;i<8;i++)seats.push({x:MEET.x+MEET.w/2+Math.cos(i/8*6.283)*130,y:MEET.y+140+Math.sin(i/8*6.283)*55});
 const OWNER={x:800,y:150};
-const packets=FILES.map((f,i)=>({p:{title:f.file},f,path:f.path,u:-i*1.6,seg:-1}));
-const pulses=[];const ZC=n=>n==="OWNER"?"Entrance":Z[A[n].zone].name;
-const pos=n=>n==="OWNER"?OWNER:{x:A[n].dx,y:A[n].dy-10};
+const ZC=n=>n==="OWNER"?"Entrance":Z[A[n].zone].name;
 pc.innerHTML=["Briefed","In progress","Review","Delivered"].map(s=>`<span><b>${PROJECTS.filter(p=>p.status===s).length}</b>${s}</span>`).join('');hc.textContent=HEADCOUNT;
 function clock(){clk.textContent=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Dubai',hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(new Date())}setInterval(clock,1000);clock();
 // ---- projection helpers (camera lives with fit()) ----
@@ -188,7 +190,6 @@ function wallY(x,y1,y2,h,fill,stroke){poly([P(x,y1,0),P(x,y2,0),P(x,y2,h),P(x,y1
 function glass(x1,x2,y,h){const a=P(x1,y,0),b=P(x2,y,h);const g=ctx.createLinearGradient(a[0],a[1],b[0],b[1]);g.addColorStop(0,'rgba(255,255,255,.02)');g.addColorStop(.45,'rgba(255,255,255,.07)');g.addColorStop(.5,'rgba(255,255,255,.02)');g.addColorStop(1,'rgba(255,255,255,.02)');
  wallX(x1,x2,y,h,g,'rgba(198,255,0,.18)');const t1=P(x1,y,h),t2=P(x2,y,h);ctx.strokeStyle='rgba(244,244,241,.25)';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(t1[0],t1[1]);ctx.lineTo(t2[0],t2[1]);ctx.stroke()}
 const DC={ceo:'#C6FF00',own:'#C6FF00',cos:'#F4F4F1',gm:'#F4F4F1',mktm:'#C6FF00',mkt:'#C6FF00',crem:'#3DE0FF',cre:'#3DE0FF',ai:'#3DE0FF',salesm:'#FFB23D',sales:'#FFB23D',opsm:'#B48CFF',ops:'#B48CFF'};const zg={};
-const FL=n=>n==="OWNER"?2:Z[A[n].zone].floor;
 let ROUTES=null;
 function buildRoutes(){const r=[],L=(fl,zone,pts,w=2.2)=>r.push({fl,zone,pts,w,c:DC[zone]});const ch=a=>a.dy-34;
  // ---- Floor 2 ----
@@ -200,12 +201,7 @@ function buildRoutes(){const r=[],L=(fl,zone,pts,w=2.2)=>r.push({fl,zone,pts,w,c
  const bus=(fl,zid,laneY,members,entry)=>{const xs=members.map(m=>m.dx);L(fl,zid,[[Math.min(...xs,entry),laneY],[Math.max(...xs,entry),laneY]]);members.forEach(m=>L(fl,zid,[[m.dx,laneY],[m.dx,m.dy-40]],1.6))};
  const inZ=z=>ag.filter(a=>a.zone===z);
  bus(2,'ops',695,inZ('ops'),1340);
- // CEO -> riser (nested L's in own lanes: no crossings)
- L(2,'mktm',[[770,491],[770,612],[250,612],[250,760]]);L(2,'crem',[[785,491],[785,622],[260,622],[260,760]]);L(2,'salesm',[[800,491],[800,632],[270,632],[270,760]]);
- // ---- Floor 1 (from riser) ----
- L(1,'mktm',[[250,760],[250,630],[20,630],[20,156],[230,156]]);
- L(1,'crem',[[260,760],[260,470]]);
- L(1,'salesm',[[270,775],[770,775]]);
+ // Floors meet at the escalator, not a bundle of cross-floor lines.
  // Marketing Manager -> Growth Floor (top lane row1, left aisle -> mid lane row2)
  const mk=Z.mkt,m1=inZ('mkt').filter(a=>a.dy<mk.y+150),m2=inZ('mkt').filter(a=>a.dy>mk.y+150);
  L(1,'mkt',[[290,156],[530,156],[530,85],[580,85]]);bus(1,'mkt',mk.y+45,m1,580);
@@ -232,30 +228,66 @@ let hover=null,last=performance.now(),T=0;
 const dub=()=>new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Dubai',hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(new Date());
 function log(ic,html){const d=document.createElement('div');d.className='ev';d.innerHTML=`<span class="t">${dub()}</span><span class="ic">${ic}</span><span>${html}</span>`;const L=document.getElementById('log');L.prepend(d);while(L.children.length>40)L.lastChild.remove()}
 const nm=n=>n==="OWNER"?"Owner":n;
-let chatT=1.5,meetT=1e9,meeting=null;const moving=()=>ag.filter(a=>a.state!=='desk').length;
-function say(a,txt,dur=2.8){a.bub={s:txt,t:dur,d:dur}}
+let meeting=null,huddle=null,convos=[],booted=false,nextMeet=22,nextHuddle=11,nextLounge=8,nextPair=6;
+const moving=()=>ag.filter(a=>a.state!=='desk').length;
+const here=a=>a.visFloor||Z[a.zone].floor;
+function say(a,txt,dur=2.6){a.bub={s:txt,t:dur,d:dur}}
+function escPoint(u){return {x:ESC.x+ESC.w/2,y:ESC.y+10+u*(ESC.h-24),z:10+u*42}}
+function endConvo(c){c.people.forEach(p=>{if(p.convo===c){p.convo=null;p.mate=null;p.chat=0;p.bub=null}});convos=convos.filter(x=>x!==c)}
+function speak(c){const n=c.people.length,speaker=c.people[c.i%n];
+ c.people.forEach(p=>{p.bub=null;p.mate=p===speaker?c.people[(c.i+1)%n]:speaker;p.chat=T+30});
+ say(speaker,c.lines[c.i%c.lines.length],2.5);c.i++;c.next=T+2.55}
+function startConvo(people,lines,kind){if(people.length<2||people.some(p=>p.convo))return null;const c={people,lines,i:0,next:0,kind};
+ people.forEach(p=>{p.convo=c});convos.push(c);speak(c);
+ log('💬',`<b>${people.map(p=>p.name).join('</b> · <b>')}</b>`);if(people[0])zg[people[0].zone]=T;return c}
+function goHome(a){a.meet=false;a.homebound=true;goTo(a,a.dx,a.dy+26,Z[a.zone].floor)}
+function goTo(a,x,y,floor){const from=here(a);if(a.state==='desk'){a.prev=a.status;a.y=a.dy+26}if(!a.meet)a.status='walking';
+ if(from!==floor){a.trip={phase:'toEsc',from,destFloor:floor,destX:x,destY:y,u:0};a.tx=ESC.x+ESC.w/2;a.ty=ESC.y+18;a.state='go'}
+ else{a.trip=null;a.tx=x;a.ty=y;a.state='go'}}
 function update(dt){T+=dt;
- // two-way discussions
- chatT-=dt;if(chatT<0){chatT=rnd(3,5);const p=PAIRS[Math.floor(Math.random()*PAIRS.length)],a=A[p[0]],b=A[p[1]];if(!a.bub&&!b.bub){say(a,p[2]);setTimeout(()=>say(b,p[3]),1300);a.chat=b.chat=T+4;a.mate=b;b.mate=a;log('💬',`<b>${p[0]}</b> ↔ <b>${p[1]}</b>: “${p[2]}”`)}}
- // meeting gatherings
- meetT-=dt;if(meetT<0&&!meeting){const pool=ag.filter(a=>a.state==='desk'&&a.name!=='CEO');const grp=[];while(grp.length<3){const c=pool[Math.floor(Math.random()*pool.length)];if(!grp.includes(c))grp.push(c)}
-  meeting={grp,until:T+9};grp.forEach((a,i)=>{const s=seats[(i*3)%8];a.tx=s.x;a.ty=s.y;a.state='go';a.prev=a.status;a.status='in meeting';a.y=a.dy+26;a.meet=true});
-  log('🗣️',`Discussion in <b>Board Room</b>: ${grp.map(a=>a.name).join(', ')}`)}
- if(meeting&&T>meeting.until){meeting.grp.forEach(a=>{a.state='back';a.tx=a.dx;a.ty=a.dy+26;a.meet=false});meeting=null;meetT=rnd(14,20)}
- for(const a of ag){a.bt-=dt;if(a.bt<0){a.bt=rnd(7,16);if(!ag.some(o=>o!==a&&o.bub&&Math.hypot(o.dx-a.dx,o.dy-a.dy)<260))say(a,a.lines[Math.floor(Math.random()*a.lines.length)],2.6)}if(a.bub){a.bub.t-=dt;if(a.bub.t<0)a.bub=null}
-  if(a.state==='desk'){a.t-=dt;if(a.t<0&&a.name!=='CEO'&&!a.meet&&moving()<2){const mates=ag.filter(o=>o!==a&&o.zone===a.zone&&o.state==='desk');
-    if(mates.length&&Math.random()<0.62){const o=mates[Math.floor(Math.random()*mates.length)];a.tx=o.dx+(o.dx>a.dx?-36:36);a.ty=o.dy+8}
-    else{const lounge=Z[a.zone].floor===2?Z.lounge2:Z.lounge1;a.tx=lounge.x+90+Math.random()*(lounge.w-180);a.ty=lounge.y+130+Math.random()*70}
-    a.state='go';a.prev=a.status;a.status='walking';a.y=a.dy+26}else if(a.t<0)a.t=rnd(8,16)}
-  else if(a.state==='go'||a.state==='back'){const dx=a.tx-a.x,dy=a.ty-a.y,d=Math.hypot(dx,dy),v=110*dt;
-   if(d<v){a.x=a.tx;a.y=a.ty;if(a.state==='go'){a.state='stay';a.t=a.meet?999:rnd(2,4)}else{a.state='desk';a.status=a.prev;a.y=a.dy-18;a.t=rnd(12,28)}}else{a.x+=dx/d*v;a.y+=dy/d*v}}
-  else if(a.state==='stay'){a.t-=dt;if(a.t<0){a.state='back';a.tx=a.dx;a.ty=a.dy+26}}}
- for(const k of packets){k.u+=dt*.32;const n=k.path.length-1;if(k.u>n+2.5)k.u=0;const sg=Math.floor(k.u);
-  if(k.u>=0&&sg!==k.seg){k.seg=sg;if(sg>=1&&sg<=n){const to=k.path[sg],fr=k.path[sg-1];pulses.push({n:to,t:T});if(to!=='OWNER')zg[A[to].zone]=T;log(k.f.type==='doc'?'📄':k.f.type==='image'?'🖼️':'🎬',`<b>${k.f.file}</b> ${nm(fr)} → ${nm(to)}${to==='EDITOR'?' · review':''}`)}}}
- while(pulses.length&&T-pulses[0].t>1.2)pulses.shift()}
-function person(a,seated){const talk=a.chat>T&&a.mate,gait=Math.sin(T*9+a.ph);
+ if(!booted){booted=true;
+  const grp=[A.CEO,A.EXECUTIVE,A.MANAGER];
+  grp.forEach((a,i)=>{const s=seats[i*2];a.x=s.x;a.y=s.y;a.state='stay';a.t=999;a.meet=true;a.status='in meeting'});
+  meeting={grp,until:T+18};
+  startConvo(grp,["Update's waiting in review","I'm on it","Can you check this?","Looks good, approved","In progress","Sending it to you now"],'board');
+  startConvo([A.FINANCE,A.IT],["Can you check this?","I'm on it","Sending it to you now","In progress"],'desk');
+  const r=A["SALES MANAGER"];r.prev=r.status;r.status='walking';r.state='ride';r.trip={phase:'ride',u:.32,from:1,destFloor:2,destX:Z.lounge2.x+180,destY:Z.lounge2.y+150};
+  const p=escPoint(.32);r.x=p.x;r.y=p.y;r.ez=p.z;r.visFloor=1;say(r,"On my way",2.4);
+ }
+ for(const c of convos.slice()){if(T>=c.next){if(c.i>=c.lines.length)endConvo(c);else speak(c)}}
+ if(meeting&&T>meeting.until){const g=meeting.grp;g.forEach(a=>{if(a.convo)endConvo(a.convo);goHome(a)});meeting=null;nextMeet=T+rnd(16,26)}
+ nextMeet-=dt;nextHuddle-=dt;nextLounge-=dt;nextPair-=dt;
+ if(nextMeet<0&&!meeting){nextMeet=rnd(18,28);const sets=[["MARKETING MANAGER","CREATIVE MANAGER","SALES MANAGER"],["OPERATIONS MANAGER","EXECUTIVE","MANAGER"],["CREATIVE MANAGER","EDITOR","CEO"]];
+  const names=sets[Math.floor(Math.random()*sets.length)];const grp=names.map(n=>A[n]).filter(a=>a&&a.state==='desk'&&!a.convo&&!a.trip);if(grp.length>=2){meeting={grp,until:T+20,wait:true};
+   grp.forEach((a,i)=>{const s=seats[(i*2+1)%8];a.meet=true;a.status='in meeting';goTo(a,s.x,s.y,2)});log('🗣️',`Board Room · <b>${grp.map(a=>a.name).join('</b>, <b>')}</b>`)}}
+ if(meeting&&meeting.wait&&meeting.grp.every(a=>a.state==='stay'&&!a.trip)){meeting.wait=false;meeting.until=T+16;startConvo(meeting.grp,["Let's huddle","Update's waiting in review","I'm on it","Can you check this?","Looks good, approved"],'board')}
+ if(nextHuddle<0){nextHuddle=rnd(12,20);const id=['mkt','cre','ai','sales','ops'][Math.floor(Math.random()*5)];const pool=ag.filter(a=>a.zone===id&&a.state==='desk'&&!a.convo&&!a.trip&&!a.meet);
+  if(pool.length>=2&&!huddle){const grp=pool.slice(0,Math.min(3,pool.length));const z=Z[id];huddle={grp,until:0,wait:true};
+   grp.forEach((a,i)=>goTo(a,z.x+70+i*48,z.y+z.h*.62,z.floor))}}
+ if(huddle&&huddle.wait&&huddle.grp.every(a=>a.state==='stay'&&!a.trip)){huddle.wait=false;startConvo(huddle.grp,["Let's huddle","Can you check this?","I'm on it","In progress"],'huddle');huddle.grp.forEach(a=>a.t=14);huddle.until=T+15}
+ if(huddle&&!huddle.wait&&T>huddle.until){huddle.grp.forEach(a=>{if(a.convo)endConvo(a.convo);if(a.state!=='desk')goHome(a)});huddle=null}
+ if(nextLounge<0){nextLounge=rnd(10,18);const floor=Math.random()<.5?1:2;const L=floor===2?Z.lounge2:Z.lounge1;const pool=ag.filter(a=>here(a)===floor&&a.state==='desk'&&!a.convo&&!a.trip&&!a.meet);
+  if(pool.length>=2){const grp=pool.slice(0,2);grp.forEach((a,i)=>goTo(a,L.x+120+i*70,L.y+150,floor));grp.lounge=true;grp.forEach(a=>{a.lounge=grp})}}
+ if(nextPair<0){nextPair=rnd(5,9);const free=TALKS.filter(t=>t.who.every(n=>A[n]&&A[n].state==='desk'&&!A[n].convo&&!A[n].trip&&!A[n].meet)&&here(A[t.who[0]])===here(A[t.who[1]]));
+  if(free.length){const t=free[Math.floor(Math.random()*free.length)];startConvo(t.who.map(n=>A[n]),t.lines,'desk')}}
+ for(const a of ag){if(a.bub){a.bub.t-=dt;if(a.bub.t<=0)a.bub=null}
+  if(a.lounge&&a.lounge.length>1&&a.state==='stay'&&!a.trip&&a.lounge.every(p=>p.state==='stay'&&!p.trip)&&!a.convo){startConvo(a.lounge,["Got a minute?","Can you check this?","Looks good, approved","I'm on it"],'lounge');a.lounge.forEach(p=>{p.lounge=null;p.t=12})}
+  if(a.state==='ride'){a.trip.u+=dt*.28;const u=Math.min(1,a.trip.u),p=escPoint(u);a.x=p.x;a.y=p.y;a.ez=p.z;a.visFloor=u<.55?a.trip.from:a.trip.destFloor;
+   if(u>=1){a.ez=0;a.visFloor=a.trip.destFloor;a.tx=a.trip.destX;a.ty=a.trip.destY;a.trip.phase='arrive';a.state='go'}continue}
+  if(a.state==='desk'){a.t-=dt;if(a.t<0&&!a.convo&&!a.meet&&!a.trip&&moving()<2){const mates=ag.filter(o=>o!==a&&o.zone===a.zone&&o.state==='desk'&&!o.convo);
+    if(mates.length&&Math.random()<.5){const o=mates[Math.floor(Math.random()*mates.length)];goTo(a,o.dx+(o.dx>a.dx?-36:36),o.dy+8,here(a))}
+    else{const L=here(a)===2?Z.lounge2:Z.lounge1;goTo(a,L.x+100+Math.random()*(L.w-180),L.y+140,here(a))}
+   }else if(a.t<0)a.t=rnd(8,16)}
+  else if(a.state==='go'||a.state==='back'){const dx=a.tx-a.x,dy=a.ty-a.y,d=Math.hypot(dx,dy),v=120*dt;
+   if(d<v){a.x=a.tx;a.y=a.ty;
+    if(a.trip&&a.trip.phase==='toEsc'){a.state='ride';a.trip.phase='ride';a.trip.u=0;say(a,"On my way",2.2)}
+    else if(a.homebound){a.homebound=false;a.state='desk';a.status=a.prev||'working';a.x=a.dx;a.y=a.dy-18;a.visFloor=null;a.ez=0;a.t=rnd(12,28);a.meet=false;a.trip=null}
+    else{a.state='stay';a.t=a.meet?999:rnd(3,5);if(a.trip&&a.trip.phase==='arrive')a.trip=null}}
+   else{a.x+=dx/d*v;a.y+=dy/d*v}}
+  else if(a.state==='stay'){a.t-=dt;if(a.t<0&&!a.convo&&!a.meet)goHome(a)}}}
+function person(a,seated){const talk=a.mate&&(a.chat>T||a.bub),gait=Math.sin(T*9+a.ph);
  const bob=seated&&a.status==='working'?Math.sin(T*10+a.ph)*.8:!seated?-Math.abs(gait)*2.4:Math.sin(T*1.6+a.ph)*.35;
- const b=P(a.x,a.y,0),f=(.8+.2*a.y/900)*READ,lean=talk?Math.sign(a.mate.x-a.x)*2.4*f:0,hgt=(seated?54:48)*K*f,x=b[0]+lean,y=b[1]+bob;
+ const b=P(a.x,a.y,a.ez||0),f=(.8+.2*a.y/900)*READ,dir=talk?Math.sign(a.mate.x-a.x)||1:1,lean=talk?dir*5*f:0,hgt=(seated?54:48)*K*f,x=b[0]+lean,y=b[1]+bob;
  if(!seated){ctx.fillStyle='#2a2a2a';ctx.fillRect(x-5*f+gait*4*f,y-18*f,3.2*f,18*f);ctx.fillRect(x+1.6*f-gait*4*f,y-18*f,3.2*f,18*f)}
  ctx.beginPath();ctx.ellipse(x,b[1]+1,12*f,4.5*f,0,0,6.283);ctx.fillStyle='rgba(0,0,0,.22)';ctx.fill();
  const arm=seated&&a.status!=='idle'?Math.sin(T*(a.status==='working'?13:3)+a.ph):gait;
@@ -265,8 +297,9 @@ function person(a,seated){const talk=a.chat>T&&a.mate,gait=Math.sin(T*9+a.ph);
  gr=ctx.createRadialGradient(x-2*f,y-hgt-7*f,1,x,y-hgt-5*f,7*f);gr.addColorStop(0,'#fff6');gr.addColorStop(.4,a.skin);gr.addColorStop(1,'#0005');ctx.beginPath();ctx.arc(x,y-hgt-5*f,6.6*f,0,6.283);ctx.fillStyle=a.skin;ctx.fill();ctx.fillStyle=gr;ctx.fill();
  ctx.beginPath();ctx.arc(x,y-hgt-7.4*f,6.4*f,Math.PI,0);ctx.fillStyle=a.hair||'#1a1a1a';ctx.fill();
  const blink=Math.abs(Math.sin(T*.5+a.ph*2))>0.975;ctx.fillStyle='#1a1a1a';
- if(blink){ctx.fillRect(x-3.4*f,y-hgt-6.2*f,2.3*f,.7*f);ctx.fillRect(x+1.1*f,y-hgt-6.2*f,2.3*f,.7*f)}
- else{ctx.beginPath();ctx.arc(x-2.2*f,y-hgt-6.1*f,.75*f,0,6.28);ctx.arc(x+2.2*f,y-hgt-6.1*f,.75*f,0,6.28);ctx.fill()}
+ const ex=talk?dir*1.5*f:0;
+ if(blink){ctx.fillRect(x-3.4*f+ex,y-hgt-6.2*f,2.3*f,.7*f);ctx.fillRect(x+1.1*f+ex,y-hgt-6.2*f,2.3*f,.7*f)}
+ else{ctx.beginPath();ctx.arc(x-2.2*f+ex,y-hgt-6.1*f,.75*f,0,6.28);ctx.arc(x+2.2*f+ex,y-hgt-6.1*f,.75*f,0,6.28);ctx.fill()}
  if(a.status==='review'){ctx.beginPath();ctx.ellipse(x,b[1],16*f,6*f,0,0,6.283);ctx.strokeStyle=`rgba(198,255,0,${.45+.4*Math.sin(T*4)})`;ctx.lineWidth=2;ctx.stroke()}
  if(talk){ctx.beginPath();ctx.arc(x+6*f,y-hgt+1*f,2*f,0,6.28);ctx.fillStyle='#C6FF00';ctx.fill()}
  a.sx=x;a.sy=y-hgt*.6;a.hy=y-hgt-16*f-(seated&&a.alt?11:0)}
@@ -296,7 +329,16 @@ function furnish(D){const add=(y,f)=>D.push({y,f});
   if(z.id==='own'||z.id==='ceo') D.push(...plant(z.x+28,z.y+36,1),...plant(z.x+z.w-30,z.y+36,.85));
   if(!z.id.startsWith('lift')) D.push(...plant(z.x+z.w-26,z.y+z.h-28,.7));
  }}
-function drawFloor(fl,ox,oy,sc,alpha){XF(S*DPR*sc,0,0,S*DPR*sc,S*DPR*(ox-OX*sc),S*DPR*(oy-OY*sc));ctx.globalAlpha=1;VZ=ZONES.filter(z=>z.floor===fl);VA=ag.filter(a=>Z[a.zone].floor===fl);
+function drawEscalator(D){D.push({y:ESC.y+ESC.h*.5,f(){
+ box(ESC.x,ESC.y,14,ESC.h,26,'#2c2c2c','#1a1a1a','#242424');box(ESC.x+ESC.w-14,ESC.y,14,ESC.h,26,'#2c2c2c','#1a1a1a','#242424');
+ const rail=(x,z0,z1)=>{poly([P(x,ESC.y,z0),P(x,ESC.y+ESC.h,z1),P(x,ESC.y+ESC.h,z1+5),P(x,ESC.y,z0+5)],'#C6FF00')};
+ rail(ESC.x+7,32,74);rail(ESC.x+ESC.w-7,32,74);
+ const n=ESC.steps,shift=T*.4%1;
+ for(let i=0;i<n;i++){const u=(i+shift)/n,y=ESC.y+6+u*(ESC.h-20),z=8+u*44;
+  quad(ESC.x+16,y,ESC.w-32,11,z,'#1c1c1c','#333');quad(ESC.x+16,y,ESC.w-32,3,z+2,'#C6FF00')}
+ quad(ESC.x+12,ESC.y-4,ESC.w-24,14,10,'#141414','#C6FF00');quad(ESC.x+12,ESC.y+ESC.h-10,ESC.w-24,16,56,'#141414','#C6FF00');
+ const t=P(ESC.x+ESC.w+8,ESC.y+28,40);tag(t[0],t[1],'Escalator',true,11)}})}
+function drawFloor(fl,ox,oy,sc,alpha){XF(S*DPR*sc,0,0,S*DPR*sc,S*DPR*(ox-OX*sc),S*DPR*(oy-OY*sc));ctx.globalAlpha=1;VZ=ZONES.filter(z=>z.floor===fl);VA=ag.filter(a=>(a.visFloor||Z[a.zone].floor)===fl);
  // wide plate: the back edge is extended so perspective still meets the frame
  const s=slabPts();
  poly([P(s.xL,0),P(s.xR,0),P(1600,900),P(0,900)],'#181818','rgba(198,255,0,.45)',2);
@@ -322,9 +364,9 @@ function drawFloor(fl,ox,oy,sc,alpha){XF(S*DPR*sc,0,0,S*DPR*sc,S*DPR*(ox-OX*sc),
 
  // ===== orthogonal neon routes on the floor (tree buses, no crossings) =====
  drawRoutes(fl);
- drawRiser(fl);
  // drawables
  const D=[];
+ drawEscalator(D);
  for(const p of PLANTS)D.push(...plant(p[0],p[1]));
  furnish(D);
  for(const a of VA){D.push({y:a.dy-20,f:()=>{const c=P(a.dx,a.dy-26,0);ctx.beginPath();ctx.ellipse(c[0],c[1],12,5,0,0,6.283);ctx.fillStyle='#2a2a2a';ctx.fill();{const c2=P(a.dx,a.dy-26,0),c3=P(a.dx,a.dy-26,16);ctx.strokeStyle='#333';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(c2[0],c2[1]);ctx.lineTo(c3[0],c3[1]);ctx.stroke();box(a.dx-12,a.dy-34,24,16,18,'#2e2e2e','#1d1d1d','#262626');box(a.dx-12,a.dy-40,24,6,44,'#262626','#151515','#202020')}}});
@@ -353,36 +395,25 @@ function drawFloor(fl,ox,oy,sc,alpha){XF(S*DPR*sc,0,0,S*DPR*sc,S*DPR*(ox-OX*sc),
  ctx.textAlign='center';
  for(const a of VA){if(a.sx==null)continue;if(alpha>.5){a.vx=(a.sx-OX)*sc+ox;a.vy=(a.sy-OY)*sc+oy;a.vs=sc;a.vis=true}tag(a.sx,a.hy,a.name,true,8.5);
   if(hover===a){ctx.beginPath();ctx.arc(a.sx,a.sy,22,0,6.283);ctx.strokeStyle='#C6FF00';ctx.lineWidth=2;ctx.stroke()}
-  if(a.bub&&!VZ.some(z=>{const p=P(z.x+80,z.y+6,26);return Math.abs(p[0]-a.sx)<110&&Math.abs(p[1]-(a.hy-19))<22})){const al=Math.min(1,a.bub.t*2,(a.bub.d-a.bub.t)*4);ctx.globalAlpha=al;ctx.font='500 10px DM Sans';const w=ctx.measureText(a.bub.s).width+14,bx=a.sx,by=a.hy-19;rr(bx-w/2,by-10,w,20,10);ctx.fillStyle=a.chat>T?'#F4F4F1':'#C6FF00';ctx.fill();
-   ctx.beginPath();ctx.moveTo(bx-4,by+10);ctx.lineTo(bx+4,by+10);ctx.lineTo(bx,by+15);ctx.fill();ctx.fillStyle='#0A0A0A';ctx.textAlign='center';ctx.fillText(a.bub.s,bx,by+4);ctx.globalAlpha=1}}
+  if(a.bub)drawBubble(a)}
+function drawBubble(a){const al=Math.min(1,a.bub.t*3,(a.bub.d-a.bub.t)*4);if(al<=0)return;const scn=Math.max(.22,S),size=15/scn;
+ ctx.save();ctx.globalAlpha=al;ctx.font=`600 ${size}px Poppins,sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+ const w=ctx.measureText(a.bub.s).width+size*1.15,h=size*1.35,bx=a.sx,by=a.hy-h*.85;
+ ctx.beginPath();ctx.moveTo(bx-size*.22,by+h/2-1);ctx.lineTo(bx+size*.22,by+h/2-1);ctx.lineTo(a.sx,a.hy-2);ctx.closePath();ctx.fillStyle='#C6FF00';ctx.fill();
+ rr(bx-w/2,by-h/2,w,h,h/2);ctx.fillStyle='#C6FF00';ctx.fill();ctx.lineWidth=Math.max(1.5,2/scn);ctx.strokeStyle='#0A0A0A';ctx.stroke();
+ ctx.fillStyle='#0A0A0A';ctx.fillText(a.bub.s,bx,by+size*.04);ctx.restore()}
  // owner node
  if(fl===2){const o=P(OWNER.x,OWNER.y,64),pu=1+Math.sin(T*3)*.1;ctx.beginPath();ctx.arc(o[0],o[1],64*pu,0,6.283);ctx.fillStyle='rgba(198,255,0,.18)';ctx.fill();ctx.shadowColor='#C6FF00';ctx.shadowBlur=26;ctx.beginPath();ctx.arc(o[0],o[1],48,0,6.283);ctx.fillStyle='#0A0A0A';ctx.fill();ctx.strokeStyle='#C6FF00';ctx.lineWidth=5;ctx.stroke();ctx.shadowBlur=0;if(AV.complete)ctx.drawImage(AV,o[0]-45,o[1]-45,90,90);tag(o[0]+92,o[1],'Owner',true,13)}
- // handoff pulses
- for(const q of pulses){if(FL(q.n)!==fl)continue;const p=pos(q.n),c=P(p.x,p.y,70),e=(T-q.t)/1.2;ctx.beginPath();ctx.arc(c[0],c[1],8+e*38,0,6.283);ctx.strokeStyle=`rgba(198,255,0,${1-e})`;ctx.lineWidth=3;ctx.shadowColor='#C6FF00';ctx.shadowBlur=18;ctx.stroke();ctx.shadowBlur=0}
- // meeting indicator
- if(fl===2&&meeting){const c=P(MEET.x+MEET.w/2,MEET.y+60,40);const w=118;rr(c[0]-w/2,c[1]-11,w,22,11);ctx.fillStyle='#C6FF00';ctx.fill();ctx.fillStyle='#0A0A0A';ctx.font='700 10px Poppins';ctx.textAlign='center';ctx.fillText((Math.floor(T*2)%2?'●':'○')+' DISCUSSION',c[0],c[1]+4)}
- // file chips
- for(const k of packets){const n=k.path.length-1;if(k.u<0||k.u>n)continue;const i=Math.floor(k.u),f=k.u-i,na=k.path[i],nb=k.path[Math.min(i+1,n)];let a=pos(na),b=pos(nb),e=f<.5?2*f*f:1-Math.pow(-2*f+2,2)/2;
-  if(FL(na)!==FL(nb)){if(e<.5){if(FL(na)!==fl)continue;b=RISER;e*=2}else{if(FL(nb)!==fl)continue;a=RISER;e=(e-.5)*2}}else if(FL(na)!==fl)continue;
-  const pa=P(a.x,a.y,70),pb=P(b.x,b.y,70),mx=(pa[0]+pb[0])/2,my=Math.min(pa[1],pb[1])-30,x=(1-e)*(1-e)*pa[0]+2*e*(1-e)*mx+e*e*pb[0],y=(1-e)*(1-e)*pa[1]+2*e*(1-e)*my+e*e*pb[1];
-  ctx.font='600 10px Poppins';const w=ctx.measureText(k.f.file).width+34;ctx.shadowColor='#C6FF00';ctx.shadowBlur=16;rr(x-w/2,y-12,w,24,7);ctx.fillStyle='#0A0A0A';ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='#C6FF00';ctx.lineWidth=1.3;ctx.stroke();
-  const ix=x-w/2+7,iy=y-7;ctx.fillStyle='#C6FF00';
-  if(k.f.type==='doc'){ctx.beginPath();ctx.moveTo(ix,iy);ctx.lineTo(ix+8,iy);ctx.lineTo(ix+11,iy+3);ctx.lineTo(ix+11,iy+14);ctx.lineTo(ix,iy+14);ctx.closePath();ctx.fill();ctx.fillStyle='#0A0A0A';ctx.fillRect(ix+2,iy+6,7,1.3);ctx.fillRect(ix+2,iy+9,7,1.3)}
-  else if(k.f.type==='image'){ctx.fillRect(ix,iy+1,13,12);ctx.fillStyle='#0A0A0A';ctx.beginPath();ctx.moveTo(ix+1,iy+12);ctx.lineTo(ix+5,iy+6);ctx.lineTo(ix+8,iy+10);ctx.lineTo(ix+10,iy+8);ctx.lineTo(ix+12,iy+12);ctx.fill();ctx.beginPath();ctx.arc(ix+9,iy+4,1.5,0,6.283);ctx.fill()}
-  else{ctx.fillRect(ix,iy+2,13,10);ctx.fillStyle='#0A0A0A';ctx.beginPath();ctx.moveTo(ix+5,iy+4);ctx.lineTo(ix+10,iy+7);ctx.lineTo(ix+5,iy+10);ctx.fill()}
-  ctx.fillStyle='#F4F4F1';ctx.textAlign='left';ctx.fillText(k.f.file,ix+18,y+4)}}
-function drawRiser(fl){const cols=['#C6FF00','#3DE0FF','#FFB23D'];
- box(RISER.x-45,RISER.y-30,90,60,2,'#101010','#0a0a0a','#0a0a0a');
- cols.forEach((c,i)=>{const x=RISER.x-10+i*10,a=P(x,RISER.y-15,0),b=P(x,RISER.y-15,140);ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.shadowColor=c;ctx.shadowBlur=18;ctx.strokeStyle=c;ctx.lineWidth=2.5;ctx.globalAlpha=.85;ctx.stroke();
-  ctx.setLineDash([5,9]);ctx.lineDashOffset=(fl===2?-1:1)*T*40;ctx.strokeStyle='#fff';ctx.lineWidth=1;ctx.stroke();ctx.setLineDash([]);ctx.shadowBlur=0;ctx.globalAlpha=1});
- glass(RISER.x-45,RISER.x+45,RISER.y+30,140);const t=P(RISER.x,RISER.y-15,150);tag(t[0],t[1],fl===2?'↓ to Floor 1':'↑ from Floor 2',true,10)}
+ if(fl===2&&meeting){const c=P(MEET.x+MEET.w/2,MEET.y+48,48);ctx.font='700 11px Poppins';ctx.textAlign='center';const label='BOARD ROOM',w=ctx.measureText(label).width+22;rr(c[0]-w/2,c[1]-11,w,22,11);ctx.fillStyle='#C6FF00';ctx.fill();ctx.fillStyle='#0A0A0A';ctx.fillText(label,c[0],c[1]+4)}}
 let view=2,prev=2,tr=1,trT0=0;
 function setView(v){if(String(v)===String(view))return;prev=view;view=v;if(paused){tr=1}else{tr=0;trT0=performance.now()}document.querySelectorAll('#fsw [data-v]').forEach(b=>{const on=b.dataset.v==String(v);b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false')});const labels={2:'floor 2, executive',1:'floor 1, studio',both:'both floors'};cv.setAttribute('aria-label','Pop Studio office, '+labels[v]+'. Arrow keys move between people. Plus and minus zoom.')}
 function renderView(v,alpha,slide){ctx.globalAlpha=1;if(v==='both'){XF(S*DPR,0,0,S*DPR,0,0);ctx.fillStyle='#141414';ctx.fillRect(0,slide,W,H*.48);ctx.fillRect(0,H*.5+slide,W,H*.5);drawFloor(2,W*.25,4+slide,.5,alpha);drawFloor(1,W*.25,H*.5+slide,.5,alpha);
   XF(S*DPR,0,0,S*DPR,0,0);ctx.globalAlpha=alpha;
   // stacked riser link between floors
-  const p2=P(RISER.x,RISER.y-15,0),p1=P(RISER.x,RISER.y-15,140);const X=x=>(x-OX)*.5+W*.25,y2=(p2[1]-OY)*.5+4+slide,y1=(p1[1]-OY)*.5+H*.5+slide;
-  ['#C6FF00','#3DE0FF','#FFB23D'].forEach((c,i)=>{ctx.beginPath();ctx.moveTo(X(p2[0])-5+i*5,y2);ctx.lineTo(X(p1[0])-5+i*5,y1);ctx.strokeStyle=c;ctx.shadowColor=c;ctx.shadowBlur=14;ctx.lineWidth=2;ctx.stroke();ctx.shadowBlur=0});
+  const p2=P(RISER.x,RISER.y,52),p1=P(RISER.x,RISER.y,12);const X=x=>(x-OX)*.5+W*.25,y2=(p2[1]-OY)*.5+4+slide,y1=(p1[1]-OY)*.5+H*.5+slide;
+  ctx.lineCap='round';ctx.strokeStyle='#2a2a2a';ctx.lineWidth=7;ctx.beginPath();ctx.moveTo(X(p2[0]),y2);ctx.lineTo(X(p1[0]),y1);ctx.stroke();
+  ctx.strokeStyle='#C6FF00';ctx.lineWidth=2.5;ctx.setLineDash([6,8]);ctx.lineDashOffset=-T*32;ctx.beginPath();ctx.moveTo(X(p2[0]),y2);ctx.lineTo(X(p1[0]),y1);ctx.stroke();ctx.setLineDash([]);
+  ctx.font='600 11px Poppins';ctx.fillStyle='#C6FF00';ctx.textAlign='center';ctx.fillText('ESCALATOR',X(p2[0])+46,(y2+y1)/2);
   ctx.fillStyle='#8a8a8a';ctx.font='600 13px Poppins';ctx.textAlign='left';ctx.textAlign='right';ctx.fillText('FLOOR 2 · EXECUTIVE',W*.25-10,H*.25+slide);ctx.fillText('FLOOR 1 · STUDIO',W*.25-10,H*.75+slide)}
  else drawFloor(v,0,slide,1,alpha)}
 function draw(){ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.fillStyle='#0A0A0A';ctx.fillRect(0,0,cv.width,cv.height);XF(S*DPR,0,0,S*DPR,0,0);ag.forEach(a=>{a.vis=false;a.sx=null});
