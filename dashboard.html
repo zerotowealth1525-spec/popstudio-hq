@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PopStudio HQ</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0A0A0A"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="PopStudio">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Pop Studio · HQ</title><meta name="description" content="Pop Studio HQ in Dubai: workflow, org chart, and project board for an AI studio with humans in charge. Ad films, UGC videos, personal branding, and marketing. Nothing goes out without owner approval."><link rel="canonical" href="https://zerotowealth1525-spec.github.io/popstudio-hq/dashboard.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Pop Studio"><meta property="og:title" content="Pop Studio · HQ"><meta property="og:description" content="Workflow, org chart, and project board for Pop Studio, a Dubai AI studio with humans in charge."><meta property="og:url" content="https://zerotowealth1525-spec.github.io/popstudio-hq/dashboard.html"><meta property="og:image" content="https://zerotowealth1525-spec.github.io/popstudio-hq/icons/icon-512.png"><meta property="og:image:width" content="512"><meta property="og:image:height" content="512"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Pop Studio · HQ"><meta name="twitter:description" content="Workflow, org chart, and project board for Pop Studio, a Dubai AI studio with humans in charge."><meta name="twitter:image" content="https://zerotowealth1525-spec.github.io/popstudio-hq/icons/icon-512.png"><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0A0A0A"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="PopStudio"><link rel="preload" href="fonts/poppins-700.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="fonts/dm-sans-400.woff2" as="font" type="font/woff2" crossorigin>
 <script>
 // ===== EDIT PROJECTS HERE =====  status: "Briefed" | "In progress" | "Review" | "Delivered"
 const PROJECTS = [
@@ -9,29 +9,69 @@ const PROJECTS = [
 const HEADCOUNT = 25;
 </script>
 <style>
-h1,h2,h3,h4,h5,.stat b,.step,.wm{font-family:'Poppins','DM Sans',system-ui,sans-serif}
+@font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url("fonts/poppins-600.woff2") format("woff2")}
+@font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url("fonts/poppins-700.woff2") format("woff2")}
+@font-face{font-family:"DM Sans";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/dm-sans-400.woff2") format("woff2")}
+@font-face{font-family:"DM Sans";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/dm-sans-500.woff2") format("woff2")}
+h1,h2,h3,h4,h5,.stat b,.step,.wm,.hq{font-family:Poppins,'DM Sans',system-ui,sans-serif}
 .logo{display:flex;align-items:center;gap:12px}.wm{font-weight:700;font-size:20px;line-height:.88;letter-spacing:-.03em;color:var(--txt)}
-:root{--bg:#0A0A0A;--panel:#141414;--p2:#1A1A1A;--line:#2a2a2a;--txt:#F4F4F1;--mut:#8a8a8a;--pop:#C6FF00;--pop2:#C6FF00;--cy:#C6FF00}
+:root{--bg:#0A0A0A;--panel:#141414;--p2:#1A1A1A;--line:#2a2a2a;--txt:#F4F4F1;--mut:#8a8a8a;--pop:#C6FF00;--pop2:#C6FF00;--cy:#C6FF00;color-scheme:dark}
 *{box-sizing:border-box}body{margin:0;font-family:'DM Sans',system-ui,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--txt)}
-header{display:flex;justify-content:space-between;align-items:center;padding:24px 36px;border-bottom:1px solid var(--line)}
-h1{margin:0;font-size:28px;letter-spacing:-.5px}h1 span{color:var(--pop)}
-.sub{color:var(--mut);font-size:13px;margin-top:4px}.stats{display:flex;gap:12px}
+::selection{background:#C6FF00;color:#0A0A0A}
+:focus:not(:focus-visible){outline:none}
+:focus-visible{outline:2px solid #C6FF00;outline-offset:3px}
+.skip{position:absolute;left:12px;top:0;transform:translateY(-120%);background:#C6FF00;color:#0A0A0A;font:600 14px Poppins,sans-serif;padding:8px 12px;border-radius:0 0 10px 10px;z-index:20;text-decoration:none}
+.skip:focus{transform:none}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px 24px;flex-wrap:wrap;padding:24px 36px;border-bottom:1px solid var(--line)}
+h1.logo{margin:0;font-size:20px;font-weight:700;letter-spacing:0}
+.hq{font-weight:600;font-size:28px;letter-spacing:-.5px;margin-left:2px;padding-left:16px;border-left:1px solid var(--line)}
+.sub{color:var(--mut);font-size:13px;margin:4px 0 0;max-width:62ch}
+.stats{display:flex;gap:12px;flex-wrap:wrap;align-items:center;list-style:none;margin:0;padding:0}
 .stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 18px;text-align:center}.stat b{display:block;font-size:24px;color:var(--pop)}.stat small{color:var(--mut)}
-main{padding:24px 36px;display:grid;gap:24px}section{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px}
+.btn{align-self:center;background:#C6FF00;color:#0A0A0A;font:600 13px Poppins,sans-serif;padding:10px 16px;border-radius:999px;text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.btn:focus-visible{outline-color:#F4F4F1}
+main{padding:24px 36px;display:grid;gap:24px}section{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;min-width:0}
 h2{margin:0 0 16px;font-size:16px;text-transform:uppercase;letter-spacing:1.5px;color:var(--mut)}
+h2 small{text-transform:none;letter-spacing:0;font-weight:500}
 .flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.step{padding:8px 14px;border-radius:999px;background:var(--p2);border:1px solid var(--line);font-weight:600;font-size:13px}.step.hl{background:var(--pop);border-color:var(--pop);color:#0A0A0A}.arr{color:var(--pop)}
-.orgwrap{display:grid;grid-template-columns:1fr 320px;gap:20px}
+.orgwrap{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px}
+.treescroll{min-width:0;overflow-x:auto}
 ul.tree,ul.tree ul{list-style:none;margin:0;padding-left:22px;border-left:1px dashed var(--line)}ul.tree{padding-left:0;border:0}
-ul.tree li{margin:5px 0}.node{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:10px;background:var(--p2);border:1px solid var(--line);cursor:pointer;font-size:13px}
-.node:hover,.node.sel{border-color:var(--pop);box-shadow:0 0 0 2px #C6FF0033}.tog{width:16px;color:var(--pop);font-weight:700}.collapsed>ul{display:none}
-.lvl0 .tog,.lvl0 small{color:#0A0A0A!important}.lvl0{background:var(--pop);color:#0A0A0A;border-color:var(--pop)}.lvl1{border-color:#C6FF0066}.lvl2{border-color:#3a3a3a}
-.card{position:sticky;top:20px;background:var(--p2);border:1px solid var(--line);border-radius:14px;padding:18px;min-height:200px}.card h3{margin:0;color:var(--pop)}.card .r{color:var(--cy);font-size:13px;margin:4px 0 12px}.card li{color:var(--mut);font-size:13px;margin:4px 0}
-.depts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.dept{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--p2);border-top:3px solid var(--c)}.dept h4{margin:0 0 4px}.dept .m{color:var(--mut);font-size:12px;margin-bottom:10px}.chip{display:inline-block;margin:3px 3px 0 0;padding:4px 9px;border-radius:999px;background:#222;font-size:12px}
-.board{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.col{background:var(--p2);border:1px solid var(--line);border-radius:14px;padding:12px;min-height:160px}.col h5{margin:0 0 10px;display:flex;justify-content:space-between;font-size:13px}.cnt{background:#222;border-radius:99px;padding:0 8px}
+ul.tree li{margin:5px 0}
+.row{display:flex;align-items:center;gap:2px}
+.node{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:10px;background:var(--p2);border:1px solid var(--line);cursor:pointer;font:inherit;color:inherit;text-align:left;min-height:36px}
+.node:hover,.node.sel{border-color:var(--pop);box-shadow:0 0 0 2px #C6FF0033}
+.node small{color:var(--mut)}
+button.tog,span.tog{width:28px;height:28px;flex:none;display:inline-flex;align-items:center;justify-content:center;border:0;background:transparent;color:var(--pop);font:700 16px/1 Poppins,sans-serif;border-radius:8px;padding:0}
+button.tog{cursor:pointer}
+.collapsed>ul{display:none}
+.lvl0 small{color:#0A0A0A!important}.lvl0{background:var(--pop);color:#0A0A0A;border-color:var(--pop)}.lvl1{border-color:#C6FF0066}.lvl2{border-color:#3a3a3a}
+.card{position:sticky;top:20px;background:var(--p2);border:1px solid var(--line);border-radius:14px;padding:18px;min-height:200px}.card h3{margin:0;color:var(--pop);font-size:18px}.card .r{color:var(--cy);font-size:13px;margin:4px 0 12px}.card li{color:var(--mut);font-size:13px;margin:4px 0}
+.depts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.dept{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--p2);border-top:3px solid var(--c)}.dept h3{margin:0 0 4px;font-size:16px}.dept .m{color:var(--mut);font-size:12px;margin-bottom:10px}.chip{display:inline-block;margin:3px 3px 0 0;padding:4px 9px;border-radius:999px;background:#222;font-size:12px}
+.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.col{background:var(--p2);border:1px solid var(--line);border-radius:14px;padding:12px;min-height:160px}.col h3{margin:0 0 10px;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600;text-transform:none;letter-spacing:0;color:var(--txt)}.cnt{background:#222;border-radius:99px;padding:0 8px}
 .task{background:#1f1f1f;border-radius:10px;padding:12px;margin-bottom:10px;border-left:3px solid var(--pop)}.task b{display:block}.task small{color:var(--mut);display:block;margin-top:4px}
-footer{color:var(--mut);font-size:12px;text-align:center;padding:10px 0 30px}
+footer{color:var(--mut);font-size:12px;text-align:center;padding:10px 16px 30px}
+.noscript{margin:16px;padding:12px 14px;background:#141414;border:1px solid #2a2a2a;border-radius:12px}
+@media(max-width:900px){
+  header,main{padding:16px}
+  .orgwrap{grid-template-columns:minmax(0,1fr)}
+  .card{position:static}
+  .board{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hq{font-size:22px}
+}
+@media(max-width:560px){
+  .board{grid-template-columns:1fr}
+  .logo{flex-wrap:wrap}
+  .hq{margin-left:0}
+  .stat{flex:1;min-width:96px}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
 </style></head><body>
-<header><div><div class="logo"><svg width="44" height="44" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+<a class="skip" href="#main">Skip to content</a>
+<header>
+<div class="brand">
+<h1 class="logo"><svg aria-hidden="true" width="44" height="44" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <rect x="0" y="0" width="100" height="100" rx="24" fill="#C6FF00"/>
   <g fill="none" stroke="#0A0A0A" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M71 36 V68 a8 8 0 0 1 -8 8 H29 a8 8 0 0 1 -8 -8 V42 a8 8 0 0 1 8 -8 h5 l4 -6 h12"/>
@@ -40,14 +80,25 @@ footer{color:var(--mut);font-size:12px;text-align:center;padding:10px 0 30px}
   </g>
   <path d="M74 14 C75.2 21.5 77.5 23.8 85 25 C77.5 26.2 75.2 28.5 74 36 C72.8 28.5 70.5 26.2 63 25 C70.5 23.8 72.8 21.5 74 14 Z" fill="#0A0A0A"/>
 </svg>
-<div class="wm">pop<br>studio</div><h1 style="margin-left:14px;padding-left:16px;border-left:1px solid var(--line)">HQ</h1></div><div class="sub">Creative AI agency · AI ad films · UGC videos · Personal branding · SaaS marketing · Marketing</div></div>
-<div class="stats"><a href="index.html" style="align-self:center;background:#C6FF00;color:#0A0A0A;font:600 13px Poppins,sans-serif;padding:10px 16px;border-radius:999px;text-decoration:none">← Office</a><div class="stat"><b id="hc"></b><small>Headcount</small></div><div class="stat"><b>4</b><small>Departments</small></div><div class="stat"><b id="act"></b><small>Active projects</small></div></div></header>
-<main>
+<span class="wm">pop<br>studio</span><span class="hq">HQ</span></h1>
+<p class="sub">Creative AI agency · AI ad films · UGC videos · Personal branding · SaaS marketing · Marketing</p>
+</div>
+<div class="stats">
+<a class="btn" href="index.html">← Office</a>
+<ul class="stats">
+<li class="stat"><b id="hc"></b><small>Headcount</small></li>
+<li class="stat"><b>4</b><small>Departments</small></li>
+<li class="stat"><b id="act"></b><small>Active projects</small></li>
+</ul>
+</div>
+</header>
+<main id="main">
 <section><h2>Workflow</h2><div class="flow" id="flow"></div></section>
-<section><h2>Org chart <small style="text-transform:none;letter-spacing:0">(click ▸ to collapse, click a name for details)</small></h2><div class="orgwrap"><ul class="tree" id="tree"></ul><div class="card" id="card"><h3>Select a person</h3><div class="r">Click anyone in the chart</div></div></div></section>
+<section><h2>Org chart <small>(arrow collapses a team, a name opens details)</small></h2><div class="orgwrap"><div class="treescroll"><ul class="tree" id="tree"></ul></div><div class="card" id="card" aria-live="polite"><h3>Select a person</h3><div class="r">Click anyone in the chart</div></div></div></section>
 <section><h2>Departments</h2><div class="depts" id="depts"></div></section>
 <section><h2>Project board</h2><div class="board" id="board"></div></section>
 </main><footer>PopStudio HQ · nothing goes to clients or gets published without Owner approval</footer>
+<noscript><p class="noscript">The org chart and project board need JavaScript. The live office is on the Office page.</p></noscript>
 <script>
 const P=(n,r,resp,kids)=>({n,r,resp,kids:kids||[]});
 const ORG=P("Owner","Owner",["Sets direction","Final approval on everything external"],[
@@ -77,19 +128,21 @@ const ORG=P("Owner","Owner",["Sets direction","Final approval on everything exte
   P("OPERATIONS MANAGER","Head of Operations",["Finance, tools and systems"],[
    P("FINANCE","Finance",["Budgets, invoices, numbers"]),
    P("IT","IT",["Tools, automation, systems"])])])]);
-let sel;function show(p,el){sel&&sel.classList.remove("sel");(sel=el).classList.add("sel");
+let sel;function show(p,el){if(sel){sel.classList.remove("sel");sel.setAttribute("aria-pressed","false")}sel=el;el.classList.add("sel");el.setAttribute("aria-pressed","true");
  card.innerHTML=`<h3>${p.n}</h3><div class="r">${p.r}</div><ul>${p.resp.map(x=>`<li>${x}</li>`).join("")}</ul>${p.kids.length?`<div class="r">Direct reports: ${p.kids.map(k=>k.n).join(", ")}</div>`:""}`}
-function build(p,d){const li=document.createElement("li");const s=document.createElement("span");s.className="node lvl"+Math.min(d,2);
- s.innerHTML=`<span class="tog">${p.kids.length?"▾":"•"}</span>${p.n} <small style="color:var(--mut)">${p.r}</small>`;
- s.onclick=e=>{if(e.target.classList.contains("tog")&&p.kids.length){li.classList.toggle("collapsed");e.target.textContent=li.classList.contains("collapsed")?"▸":"▾"}else show(p,s)};
- li.appendChild(s);if(p.kids.length){const u=document.createElement("ul");p.kids.forEach(k=>u.appendChild(build(k,d+1)));li.appendChild(u)}return li}
+function build(p,d){const li=document.createElement("li");const row=document.createElement("div");row.className="row";
+ if(p.kids.length){const t=document.createElement("button");t.type="button";t.className="tog";t.textContent="▾";t.setAttribute("aria-expanded","true");t.setAttribute("aria-label","Collapse "+p.n);
+  t.onclick=()=>{const closed=li.classList.toggle("collapsed");t.textContent=closed?"▸":"▾";t.setAttribute("aria-expanded",closed?"false":"true");t.setAttribute("aria-label",(closed?"Expand ":"Collapse ")+p.n)};
+  row.appendChild(t)}else{const t=document.createElement("span");t.className="tog";t.textContent="•";t.setAttribute("aria-hidden","true");row.appendChild(t)}
+ const s=document.createElement("button");s.type="button";s.className="node lvl"+Math.min(d,2);s.setAttribute("aria-pressed","false");s.innerHTML=`${p.n} <small>${p.r}</small>`;s.onclick=()=>show(p,s);
+ row.appendChild(s);li.appendChild(row);if(p.kids.length){const u=document.createElement("ul");p.kids.forEach(k=>u.appendChild(build(k,d+1)));li.appendChild(u)}return li}
 tree.appendChild(build(ORG,0));
 const flat=p=>[p.n,...p.kids.flatMap(flat)];const C=ORG.kids[0];
 const cols={"MARKETING MANAGER":"#C6FF00","CREATIVE MANAGER":"#C6FF00","SALES MANAGER":"#C6FF00","OPERATIONS MANAGER":"#C6FF00"};
-depts.innerHTML=`<div class="dept" style="--c:#F4F4F1"><h4>Leadership</h4><div class="m">CEO</div>${["CEO","EXECUTIVE","MANAGER"].map(x=>`<span class="chip">${x}</span>`).join("")}</div>`+
- C.kids.filter(m=>cols[m.n]).map(m=>{const t=m.kids.flatMap(flat);return `<div class="dept" style="--c:${cols[m.n]}"><h4>${m.n.replace(" MANAGER","").replace(/^./,c=>c)}</h4><div class="m">Lead: ${m.n} · ${t.length} people</div>${t.map(x=>`<span class="chip">${x}</span>`).join("")}</div>`}).join("");
+depts.innerHTML=`<div class="dept" style="--c:#F4F4F1"><h3>Leadership</h3><div class="m">CEO</div>${["CEO","EXECUTIVE","MANAGER"].map(x=>`<span class="chip">${x}</span>`).join("")}</div>`+
+ C.kids.filter(m=>cols[m.n]).map(m=>{const t=m.kids.flatMap(flat);return `<div class="dept" style="--c:${cols[m.n]}"><h3>${m.n.replace(" MANAGER","")}</h3><div class="m">Lead: ${m.n} · ${t.length} people</div>${t.map(x=>`<span class="chip">${x}</span>`).join("")}</div>`}).join("");
 const ST=["Briefed","In progress","Review","Delivered"];
-board.innerHTML=ST.map(s=>{const ps=PROJECTS.filter(p=>p.status===s);return `<div class="col"><h5>${s}<span class="cnt">${ps.length}</span></h5>${ps.map(p=>`<div class="task"><b>${p.title}</b><small>${p.note}</small><small>👤 ${p.owner} · Briefed ${p.briefed}</small></div>`).join("")}</div>`}).join("");
+board.innerHTML=ST.map(s=>{const ps=PROJECTS.filter(p=>p.status===s);return `<section class="col" aria-label="${s}, ${ps.length}"><h3>${s}<span class="cnt">${ps.length}</span></h3>${ps.map(p=>`<article class="task"><b>${p.title}</b><small>${p.note}</small><small>👤 ${p.owner} · Briefed ${p.briefed}</small></article>`).join("")}</section>`}).join("");
 hc.textContent=HEADCOUNT;act.textContent=PROJECTS.filter(p=>p.status!=="Delivered").length;
-flow.innerHTML=["Owner","CEO","Manager","Team","EDITOR review","CEO","Owner"].map((x,i)=>`<span class="step ${x==="Owner"?"hl":""}">${x}</span>`).join('<span class="arr">→</span>');
+flow.innerHTML=["Owner","CEO","Manager","Team","EDITOR review","CEO","Owner"].map((x,i)=>`<span class="step ${x==="Owner"?"hl":""}">${x}</span>`).join('<span class="arr" aria-hidden="true">→</span>');
 </script><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))</script></body></html>

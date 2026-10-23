@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zerotowealth1525-spec.github.io/popstudio-hq/sitemap.xml
