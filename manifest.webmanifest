@@ -1,7 +1,7 @@
 {
   "name": "PopStudio HQ",
   "short_name": "PopStudio",
-  "description": "Pop Studio live office and dashboard",
+  "description": "Pop Studio live office and HQ dashboard. An AI studio in Dubai with humans in charge.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
